@@ -12,7 +12,7 @@
 @endforeach
                 sortData: {
                     by: "",
-                    order: "asc",
+                    type: "asc",
                 },
                 filter: {
 

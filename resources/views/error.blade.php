@@ -8,6 +8,6 @@
 </head>
 <body>
 <h3 style="color: red">{{ $msg }}</h3>
-<a href="/"><button>Back to the homepage.</button></a>
+<a href="{{ env('APP_URL', 'http://localhost') }}"><button>Back to the homepage.</button></a>
 
 </body>

@@ -28,7 +28,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <form action="/submit" method="post">
+                <form action="{{ env('APP_URL', 'http://localhost') }}/submit" method="post">
                     @csrf
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 offset-sm-2">Component name (*)</label>

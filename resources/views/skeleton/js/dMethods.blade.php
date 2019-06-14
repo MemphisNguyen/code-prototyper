@@ -17,6 +17,8 @@
 @foreach ($fields as $field => $type)
                     "{{ $field }}": _this.sData.{{ $field }},
 @endforeach
+                    "order_by": _this.sData.sortData.by,
+                    "order_type": _this.sData.sortData.type,
                 }
                 _this.$request.promise.get(_this.getApiLink('list'), params).then((data) => {
                     resolve(JSON.parse(data));

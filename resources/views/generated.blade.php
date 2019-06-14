@@ -1,2 +1,2 @@
 Generated source is at /storage/app/{{ $folderName }}.
-<a href="/"><button>Back to the homepage.</button></a>
+<a href="{{ env('APP_URL', 'http://localhost') }}"><button>Back to the homepage.</button></a>

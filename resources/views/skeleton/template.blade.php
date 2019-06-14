@@ -120,7 +120,7 @@
                     <f7-block class="search-form">
                         <f7-list form>
 @foreach ($fields as $field => $type)
-                            <f7-list-input type="{{ $type }}" label="{{ ucfirst($field) }}" :value="iData.{{ $field }}"
+                            <f7-list-input type="{{ $type }}" label="{{ ucfirst($field) }}" :value="sData.{{ $field }}"
                                            @input="sData.{{ $field }} = $event.target.value"></f7-list-input>
 @endforeach
                             <f7-list-item>
@@ -148,20 +148,20 @@
                                 <f7-list-input type="select" label="Sort by" :value="sData.sortData.by" @change="sData.sortData.by = $event.target.value">
                                     <option value="">None</option>
 @foreach ($fields as $field => $type)
-                                    <option value="$field">{{ ucfirst($field) }}</option>
+                                    <option value="{{ $field }}">{{ ucfirst($field) }}</option>
 @endforeach
                                 </f7-list-input>
                                 <f7-list-item>
                                     <f7-list-item-cell>
-                                        <f7-radio name="order" value="asc" :checked="sData.sortData.order=='asc'" @change="sData.sortData.order = $event.target.value;"></f7-radio> <label>Ascending</label>
-                                        <f7-radio name="order" value="des" :checked="sData.sortData.order=='des'" @change="sData.sortData.order = $event.target.value;"></f7-radio> <label>Descending</label>
+                                        <f7-radio name="order" value="asc" :checked="sData.sortData.type=='asc'" @change="sData.sortData.type = $event.target.value;"></f7-radio> <label>Ascending</label>
+                                        <f7-radio name="order" value="desc" :checked="sData.sortData.type=='desc'" @change="sData.sortData.type = $event.target.value;"></f7-radio> <label>Descending</label>
                                     </f7-list-item-cell>
                                 </f7-list-item>
                             </f7-list>
                         </f7-card>
                         <f7-card title="Filter">
                         </f7-card>
-                        <f7-button raised round fill>Apply</f7-button>
+                        <f7-button raised round fill @click="filterPopupOpened = false; updateViewData()">Apply</f7-button>
                     </f7-block>
                 </f7-page>
             </f7-popup>
@@ -169,7 +169,7 @@
     </f7-page>
 </template>
 
-<style>
+<style scoped>
 .page {
     background-color: white;
     overflow: hidden;
@@ -222,28 +222,7 @@
 }
 .add-button::after {
     content: "Add new";
-    animation: show-name 3s;
     overflow: hidden;
-    width: 0;
-    color: transparent;
-    font-size: 0;
-}
-@keyframes show-name {
-    0% {
-        color: white;
-        font-size: 14px;
-    }
-    80% {
-        color: white;
-    }
-    90% {
-        color: transparent;
-        font-size: 14px;
-    }
-    100% {
-        font-size: 0;
-    }
-
 }
 </style>
 
