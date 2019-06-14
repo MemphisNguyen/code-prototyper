@@ -121,7 +121,7 @@
                         <f7-list form>
 @foreach ($fields as $field => $type)
                             <f7-list-input type="{{ $type }}" label="{{ ucfirst($field) }}" :value="iData.{{ $field }}"
-                                           @input="iData.{{ $field }} = $event.target.value"></f7-list-input>
+                                           @input="sData.{{ $field }} = $event.target.value"></f7-list-input>
 @endforeach
                             <f7-list-item>
                                 <f7-button raised fill v-on:click="search">Search</f7-button>
