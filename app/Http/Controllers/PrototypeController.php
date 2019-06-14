@@ -30,7 +30,7 @@ class PrototypeController extends Controller
     public function handleSubmit(Request $request) {
         $iData = $request->validate([
             'name' => 'required|string',
-            'sub_folder' => 'string',
+            'sub_folder' => 'nullable|string',
             'table' => 'required|string',
             'mul_lang' => 'nullable|boolean',
             'sub_table' => 'required_with:mul_lang',
@@ -38,20 +38,22 @@ class PrototypeController extends Controller
             'display_field' => 'required|string',
             'sub_field' => 'nullable|string',
         ]);
-        $iData['name'] = str_replace(' ', '', strtolower($iData['name']));
-        $iData['sub_folder'] = ucfirst(str_replace(' ', '', strtolower($iData['sub_folder'])));
+        $iData['name'] = preg_replace('/[^[:alnum:]]+/', ' ', $iData['name']);
+        $iData['sub_folder'] = trim(ucfirst(preg_replace('/[^[:alnum:]]+/', '', $iData['sub_folder'])));
         $columns = Table::getColumns($iData['table'])->toArray();
         if (isset($iData['mul_lang'])) {
             $columns = array_merge($columns, Table::getColumns($iData['sub_table'])->toArray());
+        }
+        if (empty($columns)) {
+            return redirect('/')->withErrors('Table not found or without any column');
         }
         $fields = array();
 
         foreach ($columns as $col) {
             $fields[$col->COLUMN_NAME] = $col->DATA_TYPE;
         }
-
         $folderName = $this->__prototyping($iData['name'], $iData['sub_folder'], $fields, $iData['api_uri'], $iData['display_field'],
-            isset($iData['mul_lang']));
+            isset($iData['mul_lang']), isset($iData['sub_field']) ? $iData['sub_field'] : '');
 
         return view('generated' , [
             'folderName' => $folderName
@@ -66,42 +68,47 @@ class PrototypeController extends Controller
      * @param $displayField
      * @param $requireLang
      * @param string $displaySubField
-     * @throws \ReflectionException
+     * @return string
      */
     private function __prototyping($componentName, $subFolder, $fieldList, $apiURI, $displayField, $requireLang,
                                    $displaySubField = '') {
         foreach ($fieldList as $field => $type) {
             $fieldList[$field] = $this->__dataTypeToInput($type);
         }
+        $fileName = str_replace(' ', '', $componentName);
         $dynamicData = $this->__generateDataSection($fieldList, $apiURI, $requireLang);
         $dynamicMethods = $this->__generateMethodSection($fieldList, $requireLang);
         $fileContent = $this->__generateFiles($componentName, $fieldList, $dynamicData, $dynamicMethods, $displayField,
             $requireLang, $displaySubField);
-        return $this->__storeFile($subFolder, $componentName, $fileContent);
+        return $this->__storeFile($subFolder, $fileName, $fileContent);
 }
 
     /**
      * @param $subFolder string
      * @param $fileName
      * @param $fileContent
-     * @throws \ReflectionException
+     * @return string
      */
     private function __storeFile($subFolder, $fileName, $fileContent) {
-        $disk = Storage::disk('local');
-        $now = Carbon::now();
-        $folderName = $now->get('year') .
-            str_pad($now->get('month'), 2, '0', STR_PAD_LEFT) .
-            str_pad($now->get('day'), 2, '0', STR_PAD_LEFT) .
-            str_pad($now->get('hour'), 2, '0', STR_PAD_LEFT) .
-            str_pad($now->get('minute'), 2, '0', STR_PAD_LEFT) .
-            str_pad($now->get('second'), 2, '0', STR_PAD_LEFT);
-        $path = $folderName . '/';
-        if (!empty($subFolder)) {
-             $path .= $subFolder . '/';
-        }
+        try {
+            $disk = Storage::disk('local');
+            $now = Carbon::now();
+            $folderName = $now->get('year') .
+                str_pad($now->get('month'), 2, '0', STR_PAD_LEFT) .
+                str_pad($now->get('day'), 2, '0', STR_PAD_LEFT) .
+                str_pad($now->get('hour'), 2, '0', STR_PAD_LEFT) .
+                str_pad($now->get('minute'), 2, '0', STR_PAD_LEFT) .
+                str_pad($now->get('second'), 2, '0', STR_PAD_LEFT);
+            $path = $folderName . '/';
+            if (!empty($subFolder)) {
+                $path .= $subFolder . '/';
+            }
 
-        $disk->put($path . ucfirst($fileName ). '.vue', $fileContent);
-        return $folderName;
+            $disk->put($path . $fileName . '.vue', $fileContent);
+            return $folderName;
+        } catch (\ReflectionException $e) {
+            dd($e);
+        }
     }
 
     /**
@@ -137,16 +144,19 @@ class PrototypeController extends Controller
      * @param $dynamicMethods
      * @param $displayField
      * @param $requireLang
+     * @param $displaySubField
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    private function __generateFiles($componentName, $fieldList, $dynamicData, $dynamicMethods, $displayField, $requireLang) {
+    private function __generateFiles($componentName, $fieldList, $dynamicData, $dynamicMethods, $displayField,
+                                     $requireLang, $displaySubField) {
         return view('skeleton.template', [
             'componentName' => $componentName,
             'fields' => $fieldList,
             'dynamicData' => $dynamicData,
-            'requireLang' => $requireLang,
             'dynamicMethods' => $dynamicMethods,
             'displayField' => $displayField,
+            'requireLang' => $requireLang,
+            'displaySubField' => $displaySubField,
         ]);
     }
 

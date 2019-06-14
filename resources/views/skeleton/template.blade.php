@@ -1,18 +1,21 @@
 @php
   /**
-    * @param $componentName
-    * @param $dynamicData
-    * @param $requireLang
-    * @param $dynamicMethods
+     * @param $componentName
+     * @param $fieldList
+     * @param $dynamicData
+     * @param $dynamicMethods
+     * @param $displayField
+     * @param $requireLang
+     * @param $displaySubField
     */
 @endphp
 <template>
-    <f7-page name="{{ $componentName }}"
+    <f7-page name="{{ strtolower(str_replace(' ', '-',$componentName)) }}"
         infinite
         :infinite-preloader="!allowInfinite && allowInfinite != undefined"
         @infinite="loadMore"
     >
-        <f7-navbar title="{{ ucfirst($componentName) }}" back-link="Back">
+        <f7-navbar title="{{ $componentName }}" back-link="Back">
             <f7-link @click="toggleMultipleSelect" slot="nav-right">
                 Select
             </f7-link>
@@ -33,15 +36,18 @@
         <!-- DATA LIST -->
         <f7-block>
             <f7-list :key="forceUpdateKey">
-                <f7-list-item  v-for="value in oData" swipeout :checkbox="multipleSelect" name="selectedList"
-                    :title="value.{{ $displayField }}" {{ empty($displaySubField) ? '' : ':footer="value.' . $displaySubField . '"' }} v-bind:key="value.id" :value="value.id"
-                    v-on:click="swiping == 0 && edit(value.id)"
+                <f7-list-item  v-for="value in oData"  v-bind:key="value.id" :value="value.id" name="selectedList"
+                    :title="value.{{ $displayField }}" {!!  empty($displaySubField) ? '' : (':footer="value.' . $displaySubField . '"') !!}
+
+                    :checkbox="multipleSelect"
                     :checked="selectedList.indexOf(value.id) >= 0"
                     @change="toggleSelect"
+
+                    swipeout
+                    v-on:click="swiping == 0 && edit(value.id)"
                     @swipeout:deleted="destroy(value.id)"
                     @swipeout:open="swiping += 1"
                     @swipeout:closed="swiping -= 1">
-                    <span slot="subtitle"></span>
                     <f7-swipeout-actions right>
                         <f7-swipeout-button delete text="Delete"
                             :confirm-title="`Deleting ${value.name}?`"
@@ -244,7 +250,7 @@
 <script>
 import { Promise } from 'q';
 export default {
-    name: "{{ $componentName }}",
+    name: "{{ str_replace(' ', '', $componentName) }}",
     data() {
         return {
             // Static data

@@ -33,19 +33,20 @@
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 offset-sm-2">Component name (*)</label>
                         <div class="col-sm-6">
-                            <input type="text" name="name" class="form-control" required value="{{ old(name) }}">
+                            <input type="text" name="name" class="form-control" required value="{{ old('name') }}">
+                            <small class="form-text text-muted">e.g: Booking Passenger</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="sub_folder" class="col-sm-2 offset-sm-2">Contain folder</label>
                         <div class="col-sm-6">
-                            <input type="text" name="sub_folder" class="form-control" value="{{ old(sub_folder) }}">
+                            <input type="text" name="sub_folder" class="form-control" value="{{ old('sub_folder') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="table" class="col-sm-2 offset-sm-2">DB Table (*)</label>
                         <div class="col-sm-6">
-                            <input type="text" name="table" class="form-control" required value="{{ old(table) }}">
+                            <input type="text" name="table" class="form-control" required value="{{ old('table') }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -57,7 +58,7 @@
                     <div class="form-group row">
                         <label for="sub_table" class="col-sm-2 offset-sm-2">Relative Table</label>
                         <div class="col-sm-6">
-                            <input type="text" name="sub_table" class="form-control" value="{{ old(sub_table) }}">
+                            <input type="text" name="sub_table" class="form-control" value="{{ old('sub_table') }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -66,7 +67,7 @@
                             <div class="row form-inline">
                                 <div class="col-12">
                                     http://domain.com/
-                                    <input type="text" name="api_uri" class="form-control mb-2" required  value="{{ old(api_uri) }}"> /
+                                    <input type="text" name="api_uri" class="form-control mb-2" required  value="{{ old('api_uri') }}"> /
                                 </div>
                             </div>
                         </div>
@@ -75,13 +76,13 @@
                     <div class="form-group row">
                         <label for="display_field" class="col-sm-2 offset-sm-2">Table's field to display (*)</label>
                         <div class="col-sm-6">
-                            <input type="text" name="display_field" class="form-control" required  value="{{ old(display_field) }}">
+                            <input type="text" name="display_field" class="form-control" required  value="{{ old('display_field') }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="sub_field" class="col-sm-2 offset-sm-2">Table's sub-field to display</label>
                         <div class="col-sm-6">
-                            <input type="text" name="sub_field" class="form-control"  value="{{ old(sub_field) }}">
+                            <input type="text" name="sub_field" class="form-control"  value="{{ old('sub_field') }}">
                         </div>
                     </div>
                     <div class="form-group row">
