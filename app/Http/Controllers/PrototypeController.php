@@ -21,12 +21,6 @@ class PrototypeController extends Controller
         return view('index');
     }
 
-    public function test() {
-        $column = Table::getColumns('mt_place');
-        $column[] = Table::getColumns('mt_place_name');
-        return $column;
-    }
-
     public function handleSubmit(Request $request) {
         $iData = $request->validate([
             'name' => 'required|string',
@@ -75,21 +69,24 @@ class PrototypeController extends Controller
         foreach ($fieldList as $field => $type) {
             $fieldList[$field] = $this->__dataTypeToInput($type);
         }
+        $formattedCompName = str_replace(' ', '', $componentName);
         $fileName = str_replace(' ', '', $componentName);
-        $dynamicData = $this->__generateDataSection($fieldList, $apiURI, $requireLang);
-        $dynamicMethods = $this->__generateMethodSection($fieldList, $requireLang);
-        $fileContent = $this->__generateFiles($componentName, $fieldList, $dynamicData, $dynamicMethods, $displayField,
+        $listFile = $this->__generateListFile($componentName, $formattedCompName, $subFolder, $fieldList, $displayField,
             $requireLang, $displaySubField);
-        return $this->__storeFile($subFolder, $fileName, $fileContent);
+        $formFile = $this->__generateFormFile($formattedCompName, $fieldList, $requireLang);
+        $routesFile = $this->__generateRoutesFile($componentName, $formattedCompName, $subFolder);
+        return $this->__storeFile($subFolder, $fileName, $listFile, $formFile, $routesFile);
 }
 
     /**
      * @param $subFolder string
      * @param $fileName
-     * @param $fileContent
+     * @param $listFile
+     * @param $fileForm
+     * @param $fileRoutes
      * @return string
      */
-    private function __storeFile($subFolder, $fileName, $fileContent) {
+    private function __storeFile($subFolder, $fileName, $listFile, $fileForm, $fileRoutes) {
         try {
             $disk = Storage::disk('local');
             $now = Carbon::now();
@@ -103,8 +100,11 @@ class PrototypeController extends Controller
             if (!empty($subFolder)) {
                 $path .= $subFolder . '/';
             }
+            $path = $path . '/' . $fileName . '/';
 
-            $disk->put($path . $fileName . '.vue', $fileContent);
+            $disk->put($path . $fileName . 'List.vue', $listFile);
+            $disk->put($path . $fileName . 'Form.vue', $fileForm);
+            $disk->put($path . 'routes.js', $fileRoutes);
             return $folderName;
         } catch (\ReflectionException $e) {
             dd($e);
@@ -112,51 +112,43 @@ class PrototypeController extends Controller
     }
 
     /**
-     * @param $fieldList
-     * @param $requireLang
-     * @param $apiURI
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    private function __generateDataSection($fieldList, $apiURI, $requireLang) {
-        return view('skeleton.js.data', [
-            'fields' => $fieldList,
-            'requireLang' => $requireLang,
-            'apiURI' => $apiURI,
-        ]);
-    }
-
-    /**
-     * @param $fieldList
-     * @param $requireLang
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    private function __generateMethodSection($fieldList, $requireLang) {
-        return view('skeleton.js.dMethods', [
-            'fields' => $fieldList,
-            'requireLang' => $requireLang,
-        ]);
-    }
-
-    /**
      * @param $componentName
+     * @param $formattedCompName
      * @param $fieldList
-     * @param $dynamicData
-     * @param $dynamicMethods
+     * @param $subFolder
      * @param $displayField
      * @param $requireLang
      * @param $displaySubField
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    private function __generateFiles($componentName, $fieldList, $dynamicData, $dynamicMethods, $displayField,
+    private function __generateListFile($componentName, $formattedCompName, $subFolder, $fieldList, $displayField,
                                      $requireLang, $displaySubField) {
-        return view('skeleton.template', [
+        return view('skeleton.template-list', [
             'componentName' => $componentName,
-            'fields' => $fieldList,
-            'dynamicData' => $dynamicData,
-            'dynamicMethods' => $dynamicMethods,
+            'formattedCompName' => $formattedCompName,
+            'containFolder' => $subFolder,
+            'fieldList' => $fieldList,
             'displayField' => $displayField,
             'requireLang' => $requireLang,
             'displaySubField' => $displaySubField,
+        ]);
+    }
+
+    private function __generateFormFile($formattedCompName, $fieldList, $requireLang)
+    {
+        return view('skeleton.template-form', [
+            'formattedCompName' => $formattedCompName,
+            'fieldList' => $fieldList,
+            'requireLang' => $requireLang,
+        ]);
+    }
+
+    private function __generateRoutesFile($componentName, $formattedCompName, $subFolder)
+    {
+        return view('skeleton.template-routes', [
+            'componentName' => $componentName,
+            'formattedCompName' => $formattedCompName,
+            'containFolder' => $subFolder,
         ]);
     }
 

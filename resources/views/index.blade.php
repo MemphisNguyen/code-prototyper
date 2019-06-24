@@ -40,7 +40,7 @@
                     <div class="form-group row">
                         <label for="sub_folder" class="col-sm-2 offset-sm-2">Contain folder</label>
                         <div class="col-sm-6">
-                            <input type="text" name="sub_folder" class="form-control" value="{{ old('sub_folder') }}">
+                            <input type="text" name="sub_folder" class="form-control" value="{{ old('sub_folder') }}"  onblur="genAutofill(event)">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -52,7 +52,7 @@
                     <div class="form-group row">
                         <label for="mul_lang" class="col-sm-2 offset-sm-2">Multi-language?</label>
                         <div class="col-sm-6">
-                            <input type="checkbox" name="mul_lang" value="1">
+                            <input type="checkbox" name="mul_lang" value="1" onchange="genAutofillSubTable(event)">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -94,5 +94,24 @@
             </div>
         </div>
     </div>
+<script>
+    function genAutofill(event) {
+        let name = document.querySelector('input[name="name"]').value;
+        let table_name = name.toLowerCase().replace(' ', '_');
+        if (event.target.value === 'Master') {
+            table_name = 'mt_' + table_name;
+        }
+        document.querySelector('input[name="table"]').value = table_name;
+        document.querySelector('input[name="api_uri"]').value = 'public/' + name.toLowerCase();
+    }
+    function genAutofillSubTable(event) {
+        if (event.target.checked) {
+            let table_name = document.querySelector('input[name="table"]').value;
+            document.querySelector('input[name="sub_table"]').value = table_name + '_name';
+        }
+
+    }
+
+</script>
 </body>
 </html>
