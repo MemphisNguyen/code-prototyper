@@ -73,7 +73,7 @@ class PrototypeController extends Controller
         $fileName = str_replace(' ', '', $componentName);
         $listFile = $this->__generateListFile($componentName, $formattedCompName, $subFolder, $fieldList, $displayField,
             $requireLang, $displaySubField);
-        $formFile = $this->__generateFormFile($formattedCompName, $fieldList, $requireLang);
+        $formFile = $this->__generateFormFile($subFolder, $formattedCompName, $fieldList, $requireLang);
         $routesFile = $this->__generateRoutesFile($componentName, $formattedCompName, $subFolder);
         return $this->__storeFile($subFolder, $fileName, $listFile, $formFile, $routesFile);
 }
@@ -134,9 +134,10 @@ class PrototypeController extends Controller
         ]);
     }
 
-    private function __generateFormFile($formattedCompName, $fieldList, $requireLang)
+    private function __generateFormFile($containFolder, $formattedCompName, $fieldList, $requireLang)
     {
         return view('skeleton.template-form', [
+            'containFolder' => $containFolder,
             'formattedCompName' => $formattedCompName,
             'fieldList' => $fieldList,
             'requireLang' => $requireLang,

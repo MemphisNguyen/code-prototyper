@@ -13,3 +13,12 @@ trim_trailing_whitespace = false
 
 [*.yml]
 indent_size = 2
+
+[template-form.blade.php]
+indent_size = 2
+
+[template-list.blade.php]
+indent_size = 2
+
+[template-routes.blade.php]
+indent_size = 2

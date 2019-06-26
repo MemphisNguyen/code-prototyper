@@ -96,8 +96,8 @@
     </div>
 <script>
     function genAutofill(event) {
-        let name = document.querySelector('input[name="name"]').value;
-        let table_name = name.toLowerCase().replace(' ', '_');
+        let name = document.querySelector('input[name="name"]').value.replace(/\s/g, '_');
+        let table_name = name.toLowerCase();
         if (event.target.value === 'Master') {
             table_name = 'mt_' + table_name;
         }
