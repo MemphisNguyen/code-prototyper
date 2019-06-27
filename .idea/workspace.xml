@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3aef4481-5dc5-4885-b9fa-605a80a9cbbd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/generated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/generated.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/skeleton/template-form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/skeleton/template-form.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php" afterDir="false" />
@@ -24,20 +25,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="323" column="6" selection-start-line="323" selection-end-line="323" selection-end-column="6" />
+            <state relative-caret-position="-1732">
+              <caret line="414" column="36" selection-start-line="414" selection-start-column="29" selection-end-line="414" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-routes.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1284">
-              <caret line="75" column="58" selection-start-line="75" selection-start-column="58" selection-end-line="75" selection-end-column="58" />
-              <folding>
-                <element signature="e#40#54#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="204">
+              <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+              <caret line="12" column="54" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -45,8 +44,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="98" column="89" selection-start-line="98" selection-start-column="89" selection-end-line="98" selection-end-column="89" />
+            <state relative-caret-position="85">
+              <caret line="5" column="57" selection-start-line="5" selection-start-column="57" selection-end-line="5" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/generated.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="69" selection-start-line="7" selection-start-column="69" selection-end-line="7" selection-end-column="69" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="52" column="75" selection-start-line="52" selection-start-column="75" selection-end-line="52" selection-end-column="75" />
+              <folding>
+                <element signature="e#40#54#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -54,8 +74,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-form.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="123" column="8" selection-start-line="123" selection-start-column="8" selection-end-line="123" selection-end-column="8" />
+            <state relative-caret-position="492">
+              <caret line="229" column="6" selection-start-line="229" selection-start-column="6" selection-end-line="229" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -64,18 +84,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>master</find>
-      <find>Country</find>
-      <find>$containFolder</find>
-      <find>{{</find>
-      <find>translate</find>
-      <find>dyna</find>
-      <find>{{ tra</find>
-      <find>compo</find>
-      <find>$formatedCompName</find>
-      <find>foreach</find>
-      <find>formated</find>
-      <find>footer</find>
       <find>$displaySubField</find>
       <find>../..</find>
       <find>template-form</find>
@@ -94,6 +102,18 @@
       <find>popup sear</find>
       <find>forea</find>
       <find>@forea</find>
+      <find>includes</find>
+      <find>parentId</find>
+      <find>nee</find>
+      <find>l</find>
+      <find>idata</find>
+      <find>logout</find>
+      <find>response.code ==</find>
+      <find>catch</find>
+      <find>destro</find>
+      <find>dialog.pre</find>
+      <find>dialog.preloader</find>
+      <find>close()</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -134,16 +154,16 @@
         <option value="$PROJECT_DIR$/app/Validator/PrototypeValidator.php" />
         <option value="$PROJECT_DIR$/app/Table.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/resources/views/generated.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/error.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/js/data.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/js/dMethods.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/template.blade.php" />
         <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/resources/views/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" />
         <option value="$PROJECT_DIR$/.editorconfig" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/template-routes.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php" />
+        <option value="$PROJECT_DIR$/resources/views/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/generated.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/skeleton/template-form.blade.php" />
       </list>
@@ -354,18 +374,19 @@
       <workItem from="1561374506997" duration="1661000" />
       <workItem from="1561433246322" duration="3062000" />
       <workItem from="1561448994568" duration="3292000" />
-      <workItem from="1561517197559" duration="12239000" />
+      <workItem from="1561517197559" duration="12415000" />
+      <workItem from="1561601684261" duration="14814000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89538000" />
+    <option name="totallyTimeSpent" value="104528000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2277937" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23137535" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -377,10 +398,10 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.11709287" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32974428" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32974428" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -517,13 +538,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/storage/app/20190614024607/Hotel/Hotel.vue" />
     <entry file="file://$PROJECT_DIR$/storage/app/20190614040020/Cntry.vue" />
-    <entry file="file://$PROJECT_DIR$/resources/views/generated.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="9" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/skeleton/js/sMethod.blade.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/skeleton/js/data.blade.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/error.blade.php">
@@ -554,39 +568,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-routes.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="11" selection-start-line="48" selection-start-column="11" selection-end-line="48" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="98" column="89" selection-start-line="98" selection-start-column="89" selection-end-line="98" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="323" column="6" selection-start-line="323" selection-end-line="323" selection-end-column="6" />
+        <state relative-caret-position="204">
+          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          <caret line="12" column="54" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PrototypeController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1284">
-          <caret line="75" column="58" selection-start-line="75" selection-start-column="58" selection-end-line="75" selection-end-column="58" />
+        <state relative-caret-position="425">
+          <caret line="52" column="75" selection-start-line="52" selection-start-column="75" selection-end-line="52" selection-end-column="75" />
           <folding>
             <element signature="e#40#54#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="57" selection-start-line="5" selection-start-column="57" selection-end-line="5" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/generated.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="69" selection-start-line="7" selection-start-column="69" selection-end-line="7" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-list.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1732">
+          <caret line="414" column="36" selection-start-line="414" selection-start-column="29" selection-end-line="414" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/skeleton/template-form.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="123" column="8" selection-start-line="123" selection-start-column="8" selection-end-line="123" selection-end-column="8" />
+        <state relative-caret-position="492">
+          <caret line="229" column="6" selection-start-line="229" selection-start-column="6" selection-end-line="229" selection-end-column="6" />
         </state>
       </provider>
     </entry>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Prototyper</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
@@ -59,6 +60,12 @@
                         <label for="sub_table" class="col-sm-2 offset-sm-2">Relative Table</label>
                         <div class="col-sm-6">
                             <input type="text" name="sub_table" class="form-control" value="{{ old('sub_table') }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="need_parent_id" class="col-sm-2 offset-sm-2">Need parent object ID?</label>
+                        <div class="col-sm-6">
+                            <input type="checkbox" name="need_parent_id" value="1">
                         </div>
                     </div>
                     <div class="form-group row">

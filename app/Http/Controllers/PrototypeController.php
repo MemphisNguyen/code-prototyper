@@ -28,6 +28,7 @@ class PrototypeController extends Controller
             'table' => 'required|string',
             'mul_lang' => 'nullable|boolean',
             'sub_table' => 'required_with:mul_lang',
+            'need_parent_id' => 'nullable|boolean',
             'api_uri' => 'required|string',
             'display_field' => 'required|string',
             'sub_field' => 'nullable|string',
@@ -46,8 +47,10 @@ class PrototypeController extends Controller
         foreach ($columns as $col) {
             $fields[$col->COLUMN_NAME] = $col->DATA_TYPE;
         }
-        $folderName = $this->__prototyping($iData['name'], $iData['sub_folder'], $fields, $iData['api_uri'], $iData['display_field'],
-            isset($iData['mul_lang']), isset($iData['sub_field']) ? $iData['sub_field'] : '');
+        $folderName = $this->__prototyping($iData['name'], $iData['sub_folder'], $fields, $iData['api_uri'],
+            $iData['display_field'], isset($iData['mul_lang']),
+            isset($iData['sub_field']) ? $iData['sub_field'] : '',
+            isset($iData['need_parent_id']) ? strtolower($iData['sub_folder']) . '_id' : false);
 
         return view('generated' , [
             'folderName' => $folderName
@@ -62,19 +65,20 @@ class PrototypeController extends Controller
      * @param $displayField
      * @param $requireLang
      * @param string $displaySubField
+     * @param bool|string $parentIdField
      * @return string
      */
     private function __prototyping($componentName, $subFolder, $fieldList, $apiURI, $displayField, $requireLang,
-                                   $displaySubField = '') {
+                                   $displaySubField = '', $parentIdField = false) {
         foreach ($fieldList as $field => $type) {
             $fieldList[$field] = $this->__dataTypeToInput($type);
         }
         $formattedCompName = str_replace(' ', '', $componentName);
         $fileName = str_replace(' ', '', $componentName);
         $listFile = $this->__generateListFile($componentName, $formattedCompName, $subFolder, $fieldList, $displayField,
-            $requireLang, $displaySubField);
-        $formFile = $this->__generateFormFile($subFolder, $formattedCompName, $fieldList, $requireLang);
-        $routesFile = $this->__generateRoutesFile($componentName, $formattedCompName, $subFolder);
+            $requireLang, $displaySubField, $parentIdField);
+        $formFile = $this->__generateFormFile($subFolder, $formattedCompName, $fieldList, $requireLang, $parentIdField);
+        $routesFile = $this->__generateRoutesFile($componentName, $formattedCompName, $subFolder, $parentIdField);
         return $this->__storeFile($subFolder, $fileName, $listFile, $formFile, $routesFile);
 }
 
@@ -114,15 +118,16 @@ class PrototypeController extends Controller
     /**
      * @param $componentName
      * @param $formattedCompName
-     * @param $fieldList
      * @param $subFolder
+     * @param $fieldList
      * @param $displayField
      * @param $requireLang
      * @param $displaySubField
+     * @param $parentIdField
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     private function __generateListFile($componentName, $formattedCompName, $subFolder, $fieldList, $displayField,
-                                     $requireLang, $displaySubField) {
+                                     $requireLang, $displaySubField, $parentIdField) {
         return view('skeleton.template-list', [
             'componentName' => $componentName,
             'formattedCompName' => $formattedCompName,
@@ -131,28 +136,52 @@ class PrototypeController extends Controller
             'displayField' => $displayField,
             'requireLang' => $requireLang,
             'displaySubField' => $displaySubField,
+            'parentIdField' => $parentIdField
         ]);
     }
 
-    private function __generateFormFile($containFolder, $formattedCompName, $fieldList, $requireLang)
+    /**
+     * @param $containFolder
+     * @param $formattedCompName
+     * @param $fieldList
+     * @param $requireLang
+     * @param $parentIdField
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function __generateFormFile($containFolder, $formattedCompName, $fieldList, $requireLang, $parentIdField)
     {
         return view('skeleton.template-form', [
             'containFolder' => $containFolder,
             'formattedCompName' => $formattedCompName,
             'fieldList' => $fieldList,
             'requireLang' => $requireLang,
+            'parentIdField' => $parentIdField
         ]);
     }
 
-    private function __generateRoutesFile($componentName, $formattedCompName, $subFolder)
+    /**
+     * @param $componentName
+     * @param $formattedCompName
+     * @param $subFolder
+     * @param $parentIdField
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function __generateRoutesFile($componentName, $formattedCompName, $subFolder, $parentIdField)
     {
         return view('skeleton.template-routes', [
             'componentName' => $componentName,
             'formattedCompName' => $formattedCompName,
             'containFolder' => $subFolder,
+            'parentIdField' => $parentIdField
         ]);
     }
 
+    /**
+     * Convert column type to input type
+     *
+     * @param $dataType
+     * @return string
+     */
     private function __dataTypeToInput($dataType) {
         switch ($dataType) {
             case 'int':

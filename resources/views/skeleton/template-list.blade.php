@@ -7,6 +7,7 @@
      * @param $displayField
      * @param $requireLang
      * @param $displaySubField
+     * @param $parentIdField
     */
 @endphp
 <template>
@@ -49,7 +50,9 @@
 @if (isset($displaySubField) && !empty($displaySubField))
           :footer="value.{{ $displaySubField }}"
 @endif
-          :link="(!multipleSelect && $store.state.perms.includes('{{ $containFolder }}.{{ $formattedCompName }}.edit')) ? getPath('{{ $containFolder }}.{{ $formattedCompName }}.edit', {id: value.id}) : false"
+          :link="(!multipleSelect && $store.state.perms.includes('{{ $containFolder }}.{{ $formattedCompName }}.edit')) ?
+            getPath('{{ $containFolder }}.{{ $formattedCompName }}.edit', {id: value.id{{ $parentIdField ? ", $parentIdField: sData.$parentIdField" : "" }} }) :
+            false"
           :checkbox="multipleSelect"
           :checked="selectedList.indexOf(value.id) >= 0"
           @change="toggleSelect"
@@ -87,7 +90,7 @@
         fill
         round
         :class="{'add-button': true, 'hide': multipleSelect}"
-        :href="getPath('{{ $containFolder }}.{{ $formattedCompName }}.create')"
+        :href="getPath('{{ $containFolder }}.{{ $formattedCompName }}.create'{{ $parentIdField ? ", { $parentIdField: sData.$parentIdField}" : '' }})"
       >
         <f7-icon f7="add" color="white"></f7-icon>
         @{{ translate('New') }} &nbsp;&nbsp;
@@ -121,6 +124,15 @@
             <f7-block class="search-form">
               <f7-list form>
 @foreach ($fieldList as $field => $type)
+  @if ($field == $parentIdField)
+                <input
+                  type="hidden"
+                  name="{{ $parentIdField }}"
+                  :value="sData.{{ $parentIdField }}"
+                  @input="sData.{{ $parentIdField }} = $event.target.value"
+                >
+    @continue
+  @endif
                 <f7-list-input {{ $type != "datetime-local" ? "floating-label" : "" }} type="{{ $type }}" label="{{ ucfirst($field) }}" :value="sData.{{ $field }}"
                                @input="sData.{{ $field }} = $event.target.value"></f7-list-input>
 @endforeach
@@ -193,7 +205,10 @@
                       @change="sData.sortData.by = $event.target.value"
                     >
 @foreach ($fieldList as $field => $type)
-                        <option value="{{ $field }}" {{ ($field == $displayField) ? "selected" : "" }}>{{ ucfirst($field) }}</option>
+  @if ($field == $parentIdField)
+    @continue
+  @endif
+                      <option value="{{ $field }}" {{ ($field == $displayField) ? "selected" : "" }}>{{ ucfirst($field) }}</option>
 @endforeach
                     </select>
                   </f7-list-item>
@@ -352,11 +367,18 @@
 @if ($requireLang)
       this.languages = JSON.parse(this.getAllLangs());
 @endif
+@if ($parentIdField)
+      this.$f7router.on("routeChange", this.validateRoute);
+@else
       this.updateViewData();
+@endif
       this.$f7router.on("newData", this.updateViewData);
     },
     destroyed() {
       this.$f7router.off("newData", this.updateViewData);
+@if ($parentIdField)
+      this.$f7router.off("routeChange", this.validateRoute);
+@endif
     },
     methods: {
       // STATIC METHOD
@@ -364,10 +386,23 @@
       translate(word) {
         return translate(word, this.userLang);
       },
+@if ($parentIdField)
+      validateRoute(newRoute) {
+        if (
+          newRoute.name != "{{ $containFolder }}.{{ $formattedCompName }}.index" ||
+          this.sData.{{ $parentIdField }} ||
+          !newRoute.params.hasOwnProperty("{{ $parentIdField }}")
+        ) {
+          return;
+        }
+        this.sData.{{ $parentIdField }} = newRoute.params.{{ $parentIdField }};
+        this.updateViewData();
+      },
+@endif
       // Handle requests
       destroy(id) {
         const _this = this;
-        _this.$f7.dialog.preloader("Deleting");
+        _this.$f7.dialog.preloader(_this.translate("Deleting"));
         _this.$request.promise
           .post(
             APIRoutes.getApiLink("destroy"),
@@ -377,31 +412,23 @@
             "text"
           )
           .then(response => {
+            _this.$f7.dialog.close();
             response = JSON.parse(response);
-            switch (response.code) {
-              case 1:
-                _this.updateViewData();
-                if (_this.multipleSelect) {
-                  _this.toggleMultipleSelect();
-                }
-                break;
-              case -1:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                _this.logOut();
-                break;
-              default:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                break;
-            }
+
+            _this.handleResponse(response, response => {
+              _this.updateViewData();
+              if (_this.multipleSelect) {
+                _this.toggleMultipleSelect();
+              }
+            });
             _this.forceUpdateKey += 1;
           })
           .catch(err => {
+            _this.$f7.dialog.close();
             _this.forceUpdateKey += 1;
             _this.$f7.dialog.alert(Config.errorMsg.default, Config.errorTitle);
+            console.error(err)
           })
-          .finally(() => {
-            _this.$f7.dialog.close();
-          });
       },
       loadMore() {
         const _this = this;
@@ -412,24 +439,14 @@
         _this
           .fetchData()
           .then(response => {
-            switch (response.code) {
-              case 1:
-                _this.oData.push(...response.data);
-                if (_this.oData.length === response.size) {
-                  _this.allowInfinite = undefined;
-                } else {
-                  _this.allowInfinite = true;
-                }
-                break;
-              case -1:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                _this.logOut();
-                break;
-              default:
-                _this.pageNo -= 1;
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                break;
-            }
+            _this.handleResponse(response, response => {
+              _this.oData.push(...response.data);
+              if (_this.oData.length === response.size) {
+                _this.allowInfinite = undefined;
+              } else {
+                _this.allowInfinite = true;
+              }
+            });
           })
           .catch(err => {
             _this.pageNo -= 1;
@@ -443,28 +460,17 @@
         const _this = this;
         _this.pageNo = 1;
         _this.allowInfinite = true;
-        _this.$f7.dialog.preloader("Updating data");
+        _this.$f7.dialog.preloader(_this.translate("Updating data"));
         _this
           .fetchData()
           .then(response => {
             _this.$f7.dialog.close();
-            switch (response.code) {
-              case 1:
-                _this.oData = response.data;
-                if (response.size <= _this.pageSize)
-                  _this.allowInfinite = undefined;
-                break;
-              case -1:
-                _this.$f7.dialog.alert(
-                  Config.errorMsg.tokenExpired,
-                  Config.errorTitle
-                );
-                _this.logOut();
-                break;
-              default:
-                _this.$f7.dialog.alert(Config.errorMsg.default, Config.errorTitle);
-                break;
-            }
+
+            _this.handleResponse(response, response => {
+              _this.oData = response.data;
+              if (response.size <= _this.pageSize)
+                _this.allowInfinite = undefined;
+            });
           })
           .catch(err => {
             _this.$f7.dialog.close();

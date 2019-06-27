@@ -4,10 +4,11 @@
      * @param $formattedCompName
      * @param $fieldList
      * @param $requireLang
+     * @param $parentIdField
     */
 @endphp
 <template>
-  <f7-page name="country-form">
+  <f7-page name="{{ $formattedCompName }}-form">
     <f7-navbar :title="title" back-link>
       <f7-nav-right>
         <f7-link popup-close v-on:click="$f7router.back()">@{{ translate('Close') }}</f7-link>
@@ -15,8 +16,14 @@
     </f7-navbar>
     <f7-block>
       <f7-list form>
-        <input type="hidden" v-model="iData.id">
+        <input type="hidden" name="id" v-model="iData.id">
+@if ($parentIdField)
+        <input type="hidden" name="{{ $parentIdField }}" v-model="iData.{{ $parentIdField }}">
+@endif
 @foreach ($fieldList as $field => $type)
+  @if ($parentIdField && $field == $parentIdField)
+    @continue
+  @endif
         <f7-list-input {{ $type != "datetime-local" ? "floating-label" : "" }} type="{{ $type }}" label="{{ ucfirst($field) }}" :value="iData.{{ $field }}"
                        @input="iData.{{ $field }} = $event.target.value"></f7-list-input>
 @endforeach
@@ -109,15 +116,23 @@
           this.iData.id !== undefined
         ) return;
         if (
+@if ($parentIdField)
+          (newRoute.name === "{{ $containFolder }}.{{ $formattedCompName }}.edit" &&
+            !newRoute.params.hasOwnProperty("id")) ||
+          !newRoute.params.hasOwnProperty("{{ $parentIdField }}")
+@else
           newRoute.name === "{{ $containFolder }}.{{ $formattedCompName }}.edit" &&
             !newRoute.params.hasOwnProperty("id")
+@endif
         ) {
           console.error("Missing argument.", newRoute.params);
           return;
         }
 
         this.$f7.dialog.preloader(this.translate("Loading"));
-
+@if ($parentIdField)
+        this.iData.{{ $parentIdField }} = newRoute.params.{{ $parentIdField }};
+@endif
         if (newRoute.params.hasOwnProperty("id"))
           this.iData.id = newRoute.params.id;
         else this.iData.id = 0;
@@ -141,22 +156,11 @@
           .then(response => {
             _this.$f7.dialog.close();
             response = JSON.parse(response);
-            switch (response.code) {
-              case 1:
+
+            _this.handleResponse(response, response => {
                 _this.$f7router.emit("newData");
                 _this.$f7router.back();
-                break;
-              case -1:
-                _this.$f7.dialog.alert(
-                  Config.errorMsg.tokenExpired,
-                  Config.errorTitle
-                );
-                _this.logOut();
-                break;
-              default:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                break;
-            }
+            })
           })
           .catch(err => {
             _this.$f7.dialog.close();
@@ -170,33 +174,22 @@
         _this.$request.promise
           .post(APIRoutes.getApiLink("update"), _this.iData, "text")
           .then(response => {
+            _this.$f7.dialog.close();
             response = JSON.parse(response);
-            switch (response.code) {
-              case 1:
+
+            _this.handleResponse(response, response => {
                 _this.$f7router.emit("newData");
-                _this.$f7.dialog.close();
                 _this.$f7router.back();
-                break;
-              case -1:
-                _this.$f7.dialog.alert(
-                  Config.errorMsg.tokenExpired,
-                  Config.errorTitle
-                );
-                _this.logOut();
-                break;
-              default:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                break;
-            }
+            })
           })
           .catch(err => {
             _this.$f7.dialog.close();
             _this.$f7.dialog.alert(Config.errorMsg.default, Config.errorTitle);
+            console.err(err);
           });
       },
       fetchData() {
         const _this = this;
-        _this.$f7.dialog.close();
 
         if (!_this.iData.id) {
           _this.$f7.dialog.close();
@@ -208,27 +201,20 @@
 @if ($requireLang)
             lang: _this.iData.lang,
 @endif
+@if ($parentIdField)
+            {{ $parentIdField }}: _this.iData.{{ $parentIdField }},
+@endif
             id: _this.iData.id
           })
           .then(response => {
             _this.$f7.dialog.close();
             response = JSON.parse(response);
-            switch (response.code) {
-              case 1:
+
+            _this.handleResponse(response, response => {
 @foreach ($fieldList as $field => $type)
                 _this.iData.{{ $field }} = response.data.{{ $field }};
 @endforeach
-                  break;
-              case -1:
-                _this.$f7.dialog.alert(
-                  Config.errorMsg.tokenExpired,
-                  Config.errorTitle
-                );
-                _this.logOut();
-              default:
-                _this.$f7.dialog.alert(response.msg, Config.errorTitle);
-                break;
-            }
+            })
           })
           .catch(err => {
             _this.$f7.dialog.close();
@@ -236,10 +222,12 @@
             console.error(err);
           });
       },
+@if ($requireLang)
       changeInputLang($event) {
         this.iData.lang = $event.target.value;
         this.fetchData();
       }
+@endif
     }
   }
 </script>

@@ -3,13 +3,14 @@
        * @param $componentName
        * @param $formattedCompName
        * @param $containFolder
+       * @param $parentIdField
       */
 @endphp
 import {{ $formattedCompName }}Page from './{{ $formattedCompName }}List.vue';
 import {{ $formattedCompName }}Form from './{{ $formattedCompName }}Form.vue';
 import Config from '@/js/config.js';
 
-const prefix = '/{{ $containFolder }}/{{ $formattedCompName }}';
+const prefix = '/{{ $containFolder }}{{ $parentIdField ? '/:' . strtolower($containFolder) . '_id' : '' }}/{{ $formattedCompName }}';
 
 let apiUrl = {
   prefix: "/public/{{ strtolower(str_replace(' ', '_', $componentName)) }}/",
